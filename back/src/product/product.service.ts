@@ -1,11 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ProductRepository } from './repository';
+import { Product } from '@prisma/client';
+import { Repository } from 'src/reutilizable/repository';
 
 @Injectable()
 export class ProductService {
   constructor(
     @Inject('ProductRepository')
-    private readonly repository: ProductRepository,
+    private readonly repository: Repository<Product>,
   ) {}
 
   findAll() {

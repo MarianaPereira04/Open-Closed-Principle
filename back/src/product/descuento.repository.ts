@@ -4,22 +4,27 @@ import { PrismaService } from '../info_prisma/prisma.service';
 import { Repository } from 'src/reutilizable/repository';
 
 @Injectable()
-export class ProductPrismaRepository implements Repository<Product> {
-  constructor(private readonly prisma: PrismaService) {} 
+export class ProductWithDiscountRepository implements Repository<Product> {
+  constructor(private readonly prisma: PrismaService) {}
 
-  findAll(): Promise<Product[]> {
+  findAll() {
     return this.prisma.product.findMany();
   }
 
-  findOne(id: number): Promise<Product> {
+  findOne(id: number) {
     return this.prisma.product.findUnique({ where: { id } });
   }
 
-  create(data): Promise<Product> {
+  async create(data) {
+    // Nueva funcionalidad
+    if (data.price > 1000) {
+      data.price = data.price * 0.9; // 10% descuento
+    }
+
     return this.prisma.product.create({ data });
   }
 
-  update(id: number, data): Promise<Product> {
+  update(id: number, data) {
     return this.prisma.product.update({
       where: { id },
       data,
